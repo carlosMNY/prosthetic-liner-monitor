@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MonitoreoLiner - Sistema de Diagnóstico de Temperatura Protésica</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="logo-icon">🏥</span>
+                <h1>MonitoreoLiner</h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#caracteristicas">Características</a></li>
+                <li><a href="#diagnostico">Diagnóstico</a></li>
+                <li><a href="#rangos">Rangos</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="inicio">
+        <div class="hero-content">
+            <h2>Sistema de Monitoreo de Liner Protésico</h2>
+            <p>Diagnóstico rápido y preciso de la temperatura del muñón para usuarios de prótesis</p>
+            <button class="cta-button" onclick="document.getElementById('diagnostico').scrollIntoView({behavior: 'smooth'})">Comenzar Diagnóstico</button>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="caracteristicas">
+        <h2>Características Principales</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">👤</div>
+                <h3>Datos del Paciente</h3>
+                <p>Captura información completa del paciente incluyendo nombre, edad y sexo</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🌡️</div>
+                <h3>Lectura de Temperatura</h3>
+                <p>Monitorea la temperatura del muñón en tiempo real en grados Celsius</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Análisis Diagnóstico</h3>
+                <p>Análisis automático en 6 niveles de severidad basado en rangos médicos</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📋</div>
+                <h3>Reporte Formateado</h3>
+                <p>Genera reportes con conclusiones médicas detalladas e imprimibles</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🛡️</div>
+                <h3>Manejo de Errores</h3>
+                <p>Sistema robusto que valida datos y proporciona retroalimentación clara</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔒</div>
+                <h3>Privacidad Médica</h3>
+                <p>Cumple con estándares de privacidad en datos de salud sensibles</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Temperature Ranges Section -->
+    <section class="ranges" id="rangos">
+        <h2>Rangos de Temperatura y Diagnósticos</h2>
+        <div class="ranges-table-container">
+            <table class="ranges-table">
+                <thead>
+                    <tr>
+                        <th>Rango (°C)</th>
+                        <th>Diagnóstico</th>
+                        <th>Recomendación</th>
+                        <th>Prioridad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="range-error">
+                        <td>< 30</td>
+                        <td><strong>ERROR</strong></td>
+                        <td>Revisa el sensor</td>
+                        <td>🔴 Crítica</td>
+                    </tr>
+                    <tr class="range-alerta">
+                        <td>30 - 34.4</td>
+                        <td><strong>ALERTA</strong></td>
+                        <td>Posible falta de circulación (Isquemia)</td>
+                        <td>🟠 Alta</td>
+                    </tr>
+                    <tr class="range-normal">
+                        <td>34.5 - 37.2</td>
+                        <td><strong>NORMAL</strong></td>
+                        <td>Temperatura saludable</td>
+                        <td>🟢 Normal</td>
+                    </tr>
+                    <tr class="range-precaution">
+                        <td>37.3 - 38.0</td>
+                        <td><strong>PRECAUCIÓN</strong></td>
+                        <td>Revisa roces o presión excesiva</td>
+                        <td>🟡 Media</td>
+                    </tr>
+                    <tr class="range-danger">
+                        <td>38.1 - 39.5</td>
+                        <td><strong>PELIGRO</strong></td>
+                        <td>Riesgo de úlcera. ¡Quita el liner!</td>
+                        <td>🔴 Crítica</td>
+                    </tr>
+                    <tr class="range-emergency">
+                        <td>> 39.5</td>
+                        <td><strong>EMERGENCIA</strong></td>
+                        <td>Infección grave. Acuda al médico</td>
+                        <td>🔴 CRÍTICA</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Diagnostic Tool Section -->
+    <section class="diagnostic-tool" id="diagnostico">
+        <h2>Herramienta de Diagnóstico</h2>
+        <div class="form-container">
+            <form id="diagnosticForm">
+                <div class="form-group">
+                    <label for="patientName">Nombre del Paciente:</label>
+                    <input type="text" id="patientName" placeholder="Ej: Juan Pérez" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="age">Edad:</label>
+                        <input type="number" id="age" placeholder="Ej: 45" min="0" max="120" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sex">Sexo:</label>
+                        <select id="sex" required>
+                            <option value="">Selecciona...</option>
+                            <option value="Masculino">Masculino</option>
+                            <option value="Femenino">Femenino</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="temperature">Temperatura del Muñón (°C):</label>
+                    <input type="number" id="temperature" placeholder="Ej: 36.5" step="0.1" min="0" max="50" required>
+                    <small>Ingresa valores entre 0°C y 50°C</small>
+                </div>
+
+                <button type="submit" class="submit-button">Generar Diagnóstico</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Report Section -->
+    <section class="report-section hidden" id="reportSection">
+        <div class="report-container">
+            <div class="report-header">
+                <h2>📋 Reporte de Diagnóstico</h2>
+                <button class="print-button" onclick="window.print()">🖨️ Imprimir Reporte</button>
+            </div>
+
+            <div class="report-content">
+                <div class="report-info">
+                    <div class="info-row">
+                        <span class="label">PACIENTE:</span>
+                        <span class="value" id="reportPatient">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">EDAD:</span>
+                        <span class="value" id="reportAge">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">SEXO:</span>
+                        <span class="value" id="reportSex">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">TEMPERATURA:</span>
+                        <span class="value" id="reportTemp">-</span>
+                    </div>
+                </div>
+
+                <div class="report-diagnosis" id="reportDiagnosis">
+                    <!-- Diagnosis will be inserted here by JavaScript -->
+                </div>
+
+                <div class="report-warning">
+                    <strong>⚠️ Nota Importante:</strong>
+                    <p>Este sistema es una herramienta de apoyo diagnóstico y no reemplaza la evaluación médica profesional. Siempre consulta con un especialista en prótesis ante resultados críticos.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Future Improvements Section -->
+    <section class="future-improvements">
+        <h2>Futuras Mejoras</h2>
+        <ul class="improvements-list">
+            <li>📱 Interfaz gráfica avanzada</li>
+            <li>💾 Almacenamiento de historial de temperaturas</li>
+            <li>📈 Gráficos de tendencias de temperatura</li>
+            <li>🔔 Notificaciones automáticas para alertas</li>
+            <li>🌐 API REST para integración con sistemas médicos</li>
+            <li>📱 Aplicación móvil nativa</li>
+        </ul>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2026 MonitoreoLiner - Sistema de Diagnóstico Protésico</p>
+            <p>Autor: Carlos MNY | Licencia: MIT</p>
+            <p><a href="https://github.com/carlosMNY/prosthetic-liner-monitor">📧 Contacto y Más Información</a></p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,169 +1,103 @@
-// Función para diagnosticar la temperatura
-function diagnosticarTemperatura() {
-    const temperatureInput = document.getElementById('temperature').value;
-    
-    // Validación
-    if (temperatureInput === '' || temperatureInput === null) {
-        alert('Por favor, ingresa una temperatura válida');
+// Diagnostic Logic
+function getDiagnosis(temperature) {
+    if (temperature < 30) {
+        return {
+            level: 'ERROR',
+            description: 'ERROR: Revisa el sensor',
+            color: 'danger',
+            fullMessage: 'La lectura está fuera del rango esperado. Por favor, revisa el sensor de temperatura.'
+        };
+    } else if (temperature >= 30 && temperature <= 34.4) {
+        return {
+            level: 'ALERTA',
+            description: 'ALERTA: Posible falta de circulación (Isquemia)',
+            color: 'alerta',
+            fullMessage: 'Se detecta posible isquemia. La temperatura del muñón es baja, lo que puede indicar problemas de circulación. Se recomienda consultar con un especialista.'
+        };
+    } else if (temperature >= 34.5 && temperature <= 37.2) {
+        return {
+            level: 'NORMAL',
+            description: 'NORMAL: El muñón está en una temperatura saludable',
+            color: 'normal',
+            fullMessage: 'La temperatura del muñón es normal. Se encuentra en un rango saludable.'
+        };
+    } else if (temperature >= 37.3 && temperature <= 38.0) {
+        return {
+            level: 'PRECAUCIÓN',
+            description: 'PRECAUCIÓN: Revisa roces o presión excesiva',
+            color: 'precaution',
+            fullMessage: 'La temperatura está elevada. Verifica que el liner no cause roces o presión excesiva. Considera ajustar la prótesis.'
+        };
+    } else if (temperature >= 38.1 && temperature <= 39.5) {
+        return {
+            level: 'PELIGRO',
+            description: 'PELIGRO: Riesgo de úlcera. ¡Quita el liner!',
+            color: 'danger',
+            fullMessage: 'ALERTA: Existe riesgo de úlcera en el muñón. Se recomienda remover el liner inmediatamente y consultar con un especialista.'
+        };
+    } else if (temperature > 39.5) {
+        return {
+            level: 'EMERGENCIA',
+            description: 'EMERGENCIA: Infección grave. Acuda al médico',
+            color: 'emergency',
+            fullMessage: 'SITUACIÓN CRÍTICA: Posible infección grave. ¡ACUDA AL MÉDICO INMEDIATAMENTE! No continúe usando la prótesis sin supervisión médica.'
+        };
+    }
+}
+
+// Form Submission
+document.getElementById('diagnosticForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    // Get form values
+    const patientName = document.getElementById('patientName').value;
+    const age = document.getElementById('age').value;
+    const sex = document.getElementById('sex').value;
+    const temperature = parseFloat(document.getElementById('temperature').value);
+
+    // Validate temperature
+    if (isNaN(temperature)) {
+        alert('Por favor ingresa una temperatura válida');
         return;
     }
 
-    const temperature = parseFloat(temperatureInput);
+    // Get diagnosis
+    const diagnosis = getDiagnosis(temperature);
 
-    // Validar rango razonable
-    if (isNaN(temperature) || temperature < -50 || temperature > 100) {
-        alert('Por favor, ingresa una temperatura entre -50°C y 100°C');
-        return;
-    }
+    // Update report
+    document.getElementById('reportPatient').textContent = patientName;
+    document.getElementById('reportAge').textContent = age + ' años';
+    document.getElementById('reportSex').textContent = sex;
+    document.getElementById('reportTemp').textContent = temperature.toFixed(1) + '°C';
 
-    // Realizar diagnóstico
-    const diagnosis = realizarDiagnostico(temperature);
+    // Create diagnosis element
+    const diagnosisDiv = document.getElementById('reportDiagnosis');
+    diagnosisDiv.className = `report-diagnosis diagnosis-${diagnosis.color}`;
+    diagnosisDiv.innerHTML = `
+        <h4>${diagnosis.level}</h4>
+        <p>${diagnosis.fullMessage}</p>
+    `;
 
-    // Mostrar resultados
-    mostrarResultados(temperature, diagnosis);
-}
+    // Show report section
+    document.getElementById('reportSection').classList.remove('hidden');
 
-// Función para realizar el diagnóstico
-function realizarDiagnostico(temperature) {
-    let status = '';
-    let statusColor = '';
-    let statusIcon = '';
-    let diagnosisText = '';
-    let recommendations = [];
+    // Scroll to report
+    setTimeout(() => {
+        document.getElementById('reportSection').scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+});
 
-    // Rango crítico bajo: < 31°C
-    if (temperature < 31) {
-        status = 'CRÍTICO - TEMPERATURA BAJA';
-        statusColor = 'danger';
-        statusIcon = '❌';
-        diagnosisText = `La temperatura de ${temperature}°C es demasiado baja. El revestimiento podría estar comprometido. Esto puede indicar problemas de circulación o desprendimiento del revestimiento.`;
-        recommendations = [
-            'Revisar inmediatamente la integridad del revestimiento',
-            'Verificar la circulación sanguínea del muñón',
-            'Consultar con el especialista de forma urgente',
-            'No usar la prótesis hasta resolver el problema',
-            'Considerar ajustes en el revestimiento'
-        ];
-    }
-    // Rango de precaución bajo: 31°C - 33°C
-    else if (temperature >= 31 && temperature < 34) {
-        status = '⚠️ PRECAUCIÓN - TEMPERATURA BAJA';
-        statusColor = 'warning';
-        statusIcon = '⚠️';
-        diagnosisText = `La temperatura de ${temperature}°C está por debajo del rango óptimo. El revestimiento requiere atención especial. Podría indicar una ligera disminución de la circulación.`;
-        recommendations = [
-            'Monitorear la temperatura regularmente',
-            'Revisar el ajuste del revestimiento',
-            'Verificar que no haya desplazamiento',
-            'Consultar con el especialista si persiste',
-            'Aumentar la actividad física gradualmente'
-        ];
-    }
-    // Rango óptimo: 34°C - 37°C
-    else if (temperature >= 34 && temperature <= 37) {
-        status = '✅ ÓPTIMO';
-        statusColor = 'optimal';
-        statusIcon = '✅';
-        diagnosisText = `La temperatura de ${temperature}°C es perfecta. El revestimiento funciona correctamente y la circulación del muñón es adecuada.`;
-        recommendations = [
-            'Continuar con el uso normal de la prótesis',
-            'Mantener el monitoreo regular',
-            'Seguir con el programa de higiene establecido',
-            'Realizar ejercicios de acondicionamiento',
-            'Próxima revisión en fecha programada'
-        ];
-    }
-    // Rango de precaución alto: 37°C - 40°C
-    else if (temperature > 37 && temperature <= 40) {
-        status = '⚠️ PRECAUCIÓN - TEMPERATURA ALTA';
-        statusColor = 'warning';
-        statusIcon = '⚠️';
-        diagnosisText = `La temperatura de ${temperature}°C está ligeramente elevada. El revestimiento podría estar ajustado demasiado o podría haber inflamación leve.`;
-        recommendations = [
-            'Aumentar el tiempo de descanso con la prótesis',
-            'Revisar el ajuste del revestimiento',
-            'Verificar que no haya irritación de piel',
-            'Aplicar compresas frías si es necesario',
-            'Consultar especialista si la temperatura aumenta'
-        ];
-    }
-    // Rango crítico alto: > 40°C
-    else if (temperature > 40) {
-        status = 'CRÍTICO - TEMPERATURA ALTA';
-        statusColor = 'danger';
-        statusIcon = '🔴';
-        diagnosisText = `La temperatura de ${temperature}°C es peligrosamente alta. Existe riesgo de inflamación severa, infección o quemadura del tejido. Requiere atención inmediata.`;
-        recommendations = [
-            'DETENER el uso de la prótesis inmediatamente',
-            'Aplicar compresas frías al muñón',
-            'Elevar el muñón para reducir inflamación',
-            'Contactar al especialista de forma urgente',
-            'Buscar atención médica si hay dolor intenso',
-            'Revisar completamente el revestimiento antes de usar'
-        ];
-    }
-
-    return {
-        status: status,
-        statusColor: statusColor,
-        statusIcon: statusIcon,
-        diagnosisText: diagnosisText,
-        recommendations: recommendations
-    };
-}
-
-// Función para mostrar resultados
-function mostrarResultados(temperature, diagnosis) {
-    // Mostrar la sección de resultados
-    document.getElementById('resultsSection').style.display = 'block';
-
-    // Actualizar temperatura mostrada
-    document.getElementById('displayTemp').textContent = `${temperature}°C`;
-
-    // Actualizar diagnóstico
-    document.getElementById('diagnosisText').textContent = diagnosis.diagnosisText;
-
-    // Actualizar ícono de estado
-    const statusIcon = document.getElementById('statusIcon');
-    statusIcon.textContent = diagnosis.statusIcon;
-
-    // Actualizar recomendaciones
-    const recommendationsList = document.getElementById('recommendationsList');
-    recommendationsList.innerHTML = '';
-    diagnosis.recommendations.forEach(rec => {
-        const li = document.createElement('li');
-        li.textContent = rec;
-        recommendationsList.appendChild(li);
+// Smooth scroll for navigation links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({
+                behavior: 'smooth'
+            });
+        }
     });
-
-    // Actualizar badge de estado
-    const statusBadge = document.getElementById('statusBadge');
-    statusBadge.className = `status-badge ${diagnosis.statusColor}`;
-    statusBadge.textContent = diagnosis.status;
-
-    // Scroll suave hacia los resultados
-    const resultsSection = document.getElementById('resultsSection');
-    resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-// Función para limpiar resultados
-function limpiarResultados() {
-    document.getElementById('temperature').value = '';
-    document.getElementById('resultsSection').style.display = 'none';
-    document.getElementById('temperature').focus();
-}
-
-// Event listeners
-document.getElementById('diagnoseBtn').addEventListener('click', diagnosticarTemperatura);
-
-// Permitir diagnosticar con Enter
-document.getElementById('temperature').addEventListener('keypress', function(event) {
-    if (event.key === 'Enter') {
-        diagnosticarTemperatura();
-    }
 });
 
-// Enfocar en el input al cargar la página
-window.addEventListener('load', function() {
-    document.getElementById('temperature').focus();
-});
+console.log('MonitoreoLiner - Diagnostic Tool Loaded Successfully');
